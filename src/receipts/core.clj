@@ -1,7 +1,9 @@
 (ns receipts.core
-  (:gen-class))
+  (:gen-class)
+  (:require [[receipts.reader :as reader]
+            [receipts.price :as p]]))
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Report receipt"
   [& args]
-  (println "Hello, World!"))
+  (println (reader/scan (get args 0))))
