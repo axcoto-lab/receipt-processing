@@ -11,21 +11,30 @@
         price (p/fetch "./data/prices.csv")]
     (doseq [f fs]
       (if (.isFile f)
-          (println (str (.getParent f) "/" (.getName f))))
+          (process-receipt (slurp (str (.getParent f) "/" (.getName f)))))
     )))
 
-(def process-receipt
+(defn process-line
+  "Process a line of receipt"
+  [line]
+  (let [parts (clojure.string/split line #"\s+")]
+    (println parts)
+    (read-string (if (= (count (last parts)) 1)
+      ; Has random char at the end
+      (nth parts (- (count parts) 2))
+      (last parts)))))
+
+(defn parse-store-name
+  [line]
+  (clojure.string/trim line))
+
+(defn process-receipt
   "Process receipt"
   [receipt]
   (def rc (atom {}))
   (def lines (clojure.string/split-lines "test \n string"))
-  (doseq [item lines]
-    ()
+  (def store-name (parse-store-name (first lines)))
 
+  (doseq [item (subvec 1 (- (count (lines) 1)))]
+    (println (process-line (item)))
   ))
-
-(defn- proces-line
-  "Process a line of receipt"
-  [line]
-
-  )
