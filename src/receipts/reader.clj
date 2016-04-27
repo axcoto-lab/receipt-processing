@@ -10,8 +10,8 @@
   (let [fs (file-seq d)
         price (p/fetch "./data/prices.csv")]
     (doseq [f fs]
-      (if (.isFile f)
-          (process-receipt (slurp (str (.getParent f) "/" (.getName f)))))
+      (if (and (.isFile f) (not (= "prices.csv" (.getName f))))
+        (process-receipt (slurp (str (.getParent f) "/" (.getName f)))))
     )))
 
 (defn process-line
@@ -31,10 +31,11 @@
 (defn process-receipt
   "Process receipt"
   [receipt]
+  (println receipt)
   (def rc (atom {}))
   (def lines (clojure.string/split-lines "test \n string"))
   (def store-name (parse-store-name (first lines)))
 
-  (doseq [item (subvec 1 (- (count (lines) 1)))]
+  (doseq [item (subvec lines 1 (- (count lines) 1))]
     (println (process-line (item)))
   ))
