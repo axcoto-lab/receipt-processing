@@ -15,8 +15,8 @@
                 (line-seq rdr)))))
   (into {} p))
 
-(defn find-by-code
-  "Find price for an item"
-  [code]
-  (println prices)
-  (get prices code))
+;(defn find-by-code
+;  "Find price for an item"
+;  [code]
+; (println prices)
+;  (get prices code))
