@@ -16,7 +16,7 @@
 
 (defn parse-store-name
   [line]
-  (clojure.string/trim line))
+  (last (clojure.string/split (clojure.string/trim line) #"#")))
 
 (defn process-receipt
   "Process receipt"
@@ -25,7 +25,6 @@
   (def lines (clojure.string/split-lines receipt))
   (def store-name (parse-store-name (first lines)))
   (def prices p/fetch)
-  (println (last lines))
   (loop [index 1 total 0]
     (if (< index (- (count lines) 1))
       (let [[j paid]
@@ -60,9 +59,6 @@
         [(nth parts (- (count parts) 2)) (last parts)])]
       (- (get prices code) (Float/parseFloat paid))))
 
-(defn parse-store-name
-  [line]
-  (clojure.string/trim line))
 
 (defn diff-receipt
   "Process receipt"
@@ -80,15 +76,22 @@
       total)))
   {store plusminus})
 
+(defn display
+  [store]
+  (println store)
+  )
+
 (defn scan
   "Read from data"
   [directory]
   (def d (clojure.java.io/file directory))
   (let [fs (file-seq d)
         prices (p/fetch "./data/prices.csv")]
-    (println (merge-with +
+    (println (apply merge-with +
       (map (fn [f]
           (if (and (.isFile f) (not (= "prices.csv" (.getName f))))
             (let [csv-path (str (.getParent f) "/" (.getName f))]
               (diff-receipt (slurp csv-path) prices))))
          fs)))))
+
+
