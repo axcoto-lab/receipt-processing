@@ -11,7 +11,7 @@
     (doall (map (fn [line]
                     (let [part (str/split line #",")]
                       ;(swap! prices (fn [old] (get part 0) (get part 1)
-                      [(get part 0) (read-string (get part 1))]))
+                      [(get part 0) (Float/parseFloat (get part 1))]))
                 (line-seq rdr)))))
   (into {} p))
 
